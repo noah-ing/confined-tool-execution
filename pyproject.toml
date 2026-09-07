@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling==1.32.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "confined_tool_execution"
+version = "0.1.0"
+description = "Linux reference for capability-scoped tool process confinement"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Noah Ingwers"}]
+dependencies = []
+
+[project.optional-dependencies]
+verification = [
+  "bandit==1.9.4", "build==1.6.0", "coverage==7.16.0",
+  "detect-secrets==1.5.0", "mypy==2.3.1", "pip-audit==2.10.1",
+  "pytest==9.1.1", "ruff==0.16.5",
+]
+
+[project.urls]
+Repository = "https://github.com/noah-ing/confined-tool-execution"
+Issues = "https://github.com/noah-ing/confined-tool-execution/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/confined_tool_execution"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/tests", "/fixtures", "/examples", "/docs", "/scripts", "/README.md", "/SECURITY.md", "/LICENSE", "/pyproject.toml", "/uv.lock", "/Dockerfile", "/compose.yaml", "/.dockerignore", "/.gitignore"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+addopts = "-ra --strict-config --strict-markers"
+markers = ["linux_confinement: requires Linux Landlock, seccomp notification, and parent process inspection"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S", "RUF"]
+ignore = ["S101"]
+
+[tool.mypy]
+python_version = "3.11"
+platform = "linux"
+strict = true
+files = ["src/confined_tool_execution"]
+
+[tool.coverage.run]
+branch = true
+source = ["confined_tool_execution"]
+parallel = true
+
+[tool.coverage.report]
+show_missing = true

@@ -1,0 +1,16 @@
+services:
+  verification:
+    build: .
+    image: confined-tool-execution:reference
+    user: "10000:10000"
+    network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [SYS_PTRACE]
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:unconfined
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=64m
+    pids_limit: 64
+    mem_limit: 512m
